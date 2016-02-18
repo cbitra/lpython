@@ -1,0 +1,112 @@
+Functions and Utilities
+======================
+After learning about how objects are linked to one another, let's take a look at the functions that are the means to execute code in language. We will discuss how to define and call functions with various combinations. Then, we will cover some very useful utilities that are available to us to use in day-to-day programming. We will cover the following topics:
+
+Defining functions
+Decorating callables
+Utilities
+
+Defining functions
+Key 1: How to define functions.
+
+Functions are used to group a set of instructions and logic that performs a specific task. So, we should make functions perform one specific task and choose a name that gives us a hint about that. If a function is important and performs complex stuff, we should always add docstrings to this function so that it is easy for us to later visit and modify this function.
+
+While defining a function, we can define the following:
+
+Positional arguments (simply pass the object according to position), which are as follows:
+>>> def foo(a,b):
+...   print(a,b)
+... 
+>>> foo(1,2)
+1 2
+Default arguments (if value is not passed, the default is used), which are as follows:
+>>> def foo(a,b=3):
+...    print(a,b)
+... 
+>>> foo(3)  
+3 3
+>>> foo(3,4)
+3 4
+Keyword only arguments (must be passed as a positional or as a keyword argument), which are as follows:
+>>> def  foo(a,*,b):
+...   print(a,b)
+... 
+>>> foo(2,3)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: foo() takes 1 positional argument but 2 were given
+>>> foo(1,b=4)
+1 4
+An argument list, which is as follows:
+>>> def foo(a,*pa):
+...   print(a,pa)
+... 
+>>> foo(1)
+1 ()
+>>> foo(1,2)
+1 (2,)
+>>> foo(1,2,3)
+1 (2, 3)
+A keyword argument dictionary, which is as follows:
+>>> def foo(a,**kw):
+...   print(a,kw)
+... 
+>>> foo(2)     
+2 {}
+>>> foo(2,b=4)
+2 {'b': 4}
+>>> foo(2,b=4,v=5)
+2 {'b': 4, 'v': 5}
+When a function is called, this is how arguments are passed on:
+
+All positional arguments that are passed are consumed.
+If the function takes an argument list and there are more passed positional arguments after the first step, then the rest of the arguments are collected in an argument list:
+>>> def foo1(a,*args):
+...   print(a,args)
+... 
+>>> def foo2(a,):
+...   print(a)
+... 
+>>> foo1(1,2,3,4)
+1 (2, 3, 4)
+>>> foo2(1,2,3,4)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: foo2() takes 1 positional argument but 4 were given
+If passed position arguments are less than the defined positional arguments, then the passed keyword arguments are used for values for positional arguments. If no keyword argument is found for the positional argument, we get an error:
+>>> def foo(a,b,c):
+...   print(a,b,c)
+... 
+>>> foo(1,c=3,b=2)
+1 2 3
+>>> foo(1,b=2)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: foo() missing 1 required positional argument: 'c'
+Passed keyword variables are used only for keyword arguments:
+>>> def foo(a,b,*,c):           
+...   print(a,b,c)
+... 
+>>> foo(1,2,3)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: foo() takes 2 positional arguments but 3 were given
+>>> foo(1,2,c=3)
+1 2 3
+>>> foo(c=3,b=2,a=1)
+1 2 3
+If more keywords remain and the called function takes a keyword argument list, then the rest of the keyword arguments are passed as a keyword argument list. If the keyword argument list is not taken by the function, we get an error:
+>>> def foo(a,b,*args,c,**kwargs):
+...   print(a,b,args,c,kwargs)
+... 
+>>> foo(1,2,3,4,5,c=6,d=7,e=8)        
+1 2 (3, 4, 5) 6 {'d': 7, 'e': 8}
+Here is an example function that uses all of the preceding combinations:
+
+>>> def foo(a,b,c=2,*pa,d,e=5,**ka):
+...   print(a,b,c,d,e,pa,ka)
+... 
+>>> foo(1,2,d=4)
+1 2 2 4 5 () {}
+>>> foo(1,2,3,4,5,d=6,e=7,g=10,h=11)
+1 2 3 6 7 (4, 5) {'h': 11, 'g': 10}
